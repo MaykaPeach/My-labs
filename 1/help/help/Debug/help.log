@@ -1,0 +1,3 @@
+﻿  help.cpp
+c:\users\пользователь\desktop\учёба\2 curs\c++.labs\1\help\help\help.cpp(22): warning C4244: аргумент: преобразование "time_t" в "unsigned int", возможна потеря данных
+  help.vcxproj -> C:\Users\Пользователь\Desktop\Учёба\2 curs\c++.labs\1\help\Debug\help.exe
