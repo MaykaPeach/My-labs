@@ -73,12 +73,12 @@ int main()
 	}
 
 	int maxgor = 0, maxver = 0, gor, ver;
-	for (int i = 0; i < str; i++)//горизонталь. Ищем максимальное количество 1 в ряд
+	for (int i = 0; i < str-1; i++)//горизонталь. Ищем максимальное количество 1 в ряд
 	{
 		gor = 0;
-		for (int j = 0; j < col; j++)
+		for (int j = 0; j < col-1; j++)
 		{
-			if (matr[i][j] == 1)
+			if ((matr[i][j] == 0)&(matr[i+1][j+1] == 0))
 			{
 				gor++;
 			}
@@ -92,12 +92,12 @@ int main()
 	//cout << endl;
 	//cout << "maxgor = " << maxgor;
 
-	for (int j = 0; j < col; j++) //вертикаль. Ищем максимальное количество 1 в ряд
+	for (int j = 0; j < col-1; j++) //вертикаль. Ищем максимальное количество 1 в ряд
 	{
 		ver = 0;
-		for (int i = 0; i < str; i++)
+		for (int i = 0; i < str-1; i++)
 		{
-			if (matr[i][j] == 1)
+			if ((matr[i][j] == 0)&(matr[i + 1][j + 1] == 0))
 			{
 				ver++;
 			}
@@ -118,13 +118,13 @@ int main()
 	for (int index_diag = 0; index_diag < (str + col - 1); index_diag++) //объявляем цил по индексу диагоналей
 	{
 		diag = 0;
-		for (int i = 0; (i < index_diag + 1) && (i < str); i++) 
+		for (int i = 0; (i < index_diag + 1) && (i < str); i++) //!
 		{
 			for (int j = 0; (j < index_diag + 1) && (j < col); j++)
 			{
 				if ((i + j) == index_diag) //сумма индексов i и j в одной диагонали равна индексу диагонали
 				{
-					if (matr[i][j] == 1)
+					if ((matr[i][j] == 0)&(matr[i + 1][j + 1] == 0))
 					{
 						diag++;
 					}
@@ -148,7 +148,7 @@ int main()
 			{
 				if ((i - j) == index_diag1) //разность индексов i и j в одной диагонали равна индексу диагонали
 				{
-					if (matr[i][j] == 1)
+					if ((matr[i][j] == 0)&(matr[i + 1][j + 1] == 0))
 					{
 						diag1++;
 					}
