@@ -131,7 +131,7 @@ int main()
 	for (int index_diag = 1; index_diag < (str + col - 1); index_diag++) //объ€вл€ем цил по индексу диагоналей
 	{
 		diag = 1;
-		for (int i = 0, j = min(index_diag, col - 1); (i < str) && (j > -1); i++, j--) //!
+		for (int i = 0, j = min(index_diag, col - 1); (i < str-1) && (j > 0); i++, j--) //!
 		{
 
 			if ((matr[i][j] == 0) && (matr[i + 1][j - 1] == 0))
@@ -158,7 +158,7 @@ int main()
 	for (int index_diag1 = -col + 2; index_diag1 < str; index_diag1++) //объ€вл€ем цил по индексу диагоналей
 	{
 		diag1 = 1;
-		for (int i = 0, j = -index_diag1; (i < str) && (j < col - 1); i++, j++)
+		for (int i = 0, j = -index_diag1; (i < str-1) && (j < col - 1); i++, j++)
 		{
 			if ((matr[i][j] == 0) && (matr[i + 1][j + 1] == 0))
 			{
