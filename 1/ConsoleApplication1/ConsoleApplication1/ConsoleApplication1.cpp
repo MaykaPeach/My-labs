@@ -5,6 +5,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <ctime> 
+#include <algorithm>
 
 // ћатрица состоит из нулей и единиц. Ќайти в ней самую длинную цепочку подр€д идущих нулей по горизонтали, вертикали и диагонали.
 // ƒолматова ћай€ 91гр.
@@ -28,35 +29,35 @@ int main()
 		cin >> answer;
 		switch (answer)
 		{
-			case 0:
-			{
-				srand(time(NULL)); //функци€, чтобы рандом выдавал разные числа
-				for (int i = 0; i < str; i++) //заполнение массива 0 и 1
-					for (int j = 0; j < col; j++)
-					{
-						matr[i][j] = rand() % 2;
-					}
-				ok = true;
-				break;
-			}
-			case 1:
-			{
-				cout << "Enter elemets:\n";
-				for (int i = 0; i < str; i++) //заполнение массива ручками
+		case 0:
+		{
+			srand(time(NULL)); //функци€, чтобы рандом выдавал разные числа
+			for (int i = 0; i < str; i++) //заполнение массива 0 и 1
+				for (int j = 0; j < col; j++)
 				{
-					for (int j = 0; j < col; j++)
-					{
-						cin >> matr[i][j];
-					}
+					matr[i][j] = rand() % 2;
 				}
-				ok = true;
-				break;
-			}
-			default:
+			ok = true;
+			break;
+		}
+		case 1:
+		{
+			cout << "Enter elemets:\n";
+			for (int i = 0; i < str; i++) //заполнение массива ручками
 			{
-				cout << "Enter your answer again. Rand - '0', enter by yourself -'1'\n";
-				break;
+				for (int j = 0; j < col; j++)
+				{
+					cin >> matr[i][j];
+				}
 			}
+			ok = true;
+			break;
+		}
+		default:
+		{
+			cout << "Enter your answer again. Rand - '0', enter by yourself -'1'\n";
+			break;
+		}
 		}
 		if (answer != 1 && answer != 0) //если ответ не 1 и не 0, то цикл продолжаетс€
 			ok = false;
@@ -73,14 +74,22 @@ int main()
 	}
 
 	int maxgor = 0, maxver = 0, gor, ver;
-	for (int i = 0; i < str-1; i++)//горизонталь. »щем максимальное количество 1 в р€д
+	for (int i = 0; i < str; i++)//горизонталь. »щем максимальное количество 1 в р€д
 	{
-		gor = 0;
-		for (int j = 0; j < col-1; j++)
+		gor = 1;
+		for (int j = 0; j < col - 1; j++)
 		{
-			if ((matr[i][j] == 0)&(matr[i+1][j+1] == 0))
+			if ((matr[i][j] == 0)&(matr[i][j + 1] == 0))
 			{
 				gor++;
+				if (maxgor < gor)
+				{
+					maxgor = gor;
+				}
+			}
+			else
+			{
+				gor = 1;
 			}
 		}
 		if (maxgor < gor)
@@ -89,17 +98,23 @@ int main()
 		}
 	}
 	max = maxgor;
-	//cout << endl;
-	//cout << "maxgor = " << maxgor;
 
-	for (int j = 0; j < col-1; j++) //вертикаль. »щем максимальное количество 1 в р€д
+	for (int j = 0; j < col; j++) //вертикаль. »щем максимальное количество 1 в р€д
 	{
-		ver = 0;
-		for (int i = 0; i < str-1; i++)
+		ver = 1;
+		for (int i = 0; i < str - 1; i++)
 		{
-			if ((matr[i][j] == 0)&(matr[i + 1][j + 1] == 0))
+			if ((matr[i][j] == 0)&(matr[i + 1][j] == 0))
 			{
 				ver++;
+				if (maxver < ver)
+				{
+					maxver = ver;
+				}
+			}
+			else
+			{
+				ver = 1;
 			}
 		}
 		if (maxver < ver)
@@ -111,48 +126,51 @@ int main()
 	{
 		max = maxver;
 	}
-	//cout << endl;
-//	cout << "maxver = " << maxver;
 
 	int diag, maxdiag = 0; //диагональ right_top -> left_bottom
-	for (int index_diag = 0; index_diag < (str + col - 1); index_diag++) //объ€вл€ем цил по индексу диагоналей
+	for (int index_diag = 1; index_diag < (str + col - 1); index_diag++) //объ€вл€ем цил по индексу диагоналей
 	{
-		diag = 0;
-		for (int i = 0; (i < index_diag + 1) && (i < str); i++) //!
+		diag = 1;
+		for (int i = 0, j = min(index_diag, col - 1); (i < str) && (j > -1); i++, j--) //!
 		{
-			for (int j = 0; (j < index_diag + 1) && (j < col); j++)
+
+			if ((matr[i][j] == 0) && (matr[i + 1][j - 1] == 0))
 			{
-				if ((i + j) == index_diag) //сумма индексов i и j в одной диагонали равна индексу диагонали
+				diag++;
+				if (maxdiag < diag)
 				{
-					if ((matr[i][j] == 0)&(matr[i + 1][j + 1] == 0))
-					{
-						diag++;
-					}
+					maxdiag = diag;
 				}
+			}
+			else
+			{
+				diag = 1;
 			}
 		}
 		if (maxdiag < diag)
 		{
 			maxdiag = diag;
 		}
-
 	}
 
+
 	int diag1, maxdiag1 = 0; //диагональ left_top -> right_bottom
-	for (int index_diag1 = -col+1; index_diag1 < str; index_diag1++) //объ€вл€ем цил по индексу диагоналей
+	for (int index_diag1 = -col + 2; index_diag1 < str; index_diag1++) //объ€вл€ем цил по индексу диагоналей
 	{
-		diag1 = 0;
-		for (int i = 0; i < str; i++)
+		diag1 = 1;
+		for (int i = 0, j = -index_diag1; (i < str) && (j < col - 1); i++, j++)
 		{
-			for (int j = col-1; j > -1; j--)
+			if ((matr[i][j] == 0) && (matr[i + 1][j + 1] == 0))
 			{
-				if ((i - j) == index_diag1) //разность индексов i и j в одной диагонали равна индексу диагонали
+				diag1++;
+				if (maxdiag1 < diag1)
 				{
-					if ((matr[i][j] == 0)&(matr[i + 1][j + 1] == 0))
-					{
-						diag1++;
-					}
+					maxdiag1 = diag1;
 				}
+			}
+			else
+			{
+				diag1 = 1;
 			}
 		}
 		if (maxdiag1 < diag1)
@@ -165,12 +183,20 @@ int main()
 	{
 		maxdiag = maxdiag1;
 	}
-	if (max < maxdiag)
+	if (max < maxdiag1)
 	{
-		max = maxdiag;
+		max = maxdiag1;
 	}
+
 	cout << endl;
-	cout << "max = " << max;
+	if (max == 1)
+	{
+		cout << "We have not a chain more than one elemet" << endl;
+	}
+	else
+	{
+		cout << "max = " << max;
+	}
 
 	cout << endl;
 	system("pause");
