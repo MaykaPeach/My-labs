@@ -46,8 +46,11 @@ void Bill::Read()
 	cin >> tel;
 	cout << "Enter the rate of one minute of talking: " << endl;
 	cin >> rate;
-	cout << "Enter the sale(%) of rate: " << endl;
-	cin >> sale;
+	do
+	{
+		cout << "Enter the sale(%) of rate: " << endl;
+		cin >> sale;
+	} while (sale < 0 || sale > 100);
 	cout << "Enter the talk time (minutes): " << endl;
 	cin >> talk_time;
 	sum = (1 - sale / 100)*rate*talk_time;
