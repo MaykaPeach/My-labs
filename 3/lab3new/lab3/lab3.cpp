@@ -25,7 +25,7 @@ void Program(DoublyLinkedList<T> L)
 {
 	int n;
 	do {
-		cout << "Menu:\n"
+		cout << "----------------MENU----------------\n"
 			<< "1 - Get size of the list\n"
 			<< "2 - Add an element to the beginning of list\n"
 			<< "3 - Add an element to the end of list\n"
@@ -77,10 +77,14 @@ void Program(DoublyLinkedList<T> L)
 						break;
 					}
 					T min, max;
-					L.find_min(min); 
-					L.find_max(max);
-					cout << "\nMinimum = " << min << endl;
-					cout << "\nMaximum = " << max << endl << endl;
+					if (L.try_find_min(min))
+						cout << "\nMinimum = " << min << endl;
+					else
+						cout << "\nThere isn't minimum in the list " << endl;
+					if (L.try_find_max(max))
+						cout << "\nMaximum = " << max << endl << endl;
+					else
+						cout << "\nThere isn't maximum in the list " << endl;
 				}
 				break;
 		case 6: {
@@ -108,8 +112,8 @@ void Program(DoublyLinkedList<T> L)
 					cin >> el;
 					if (L.find_elem(el))
 					{
-						L.delete_all_elems(el);
-						cout << "\nDone!" << endl << endl;
+						if (L.delete_all_elems(el))
+							cout << "\nDone!" << endl << endl;
 					}
 					else cout << "\nElement weren't found!" << endl << endl;
 				}
@@ -141,7 +145,7 @@ void Program(DoublyLinkedList<T> L)
 					}
 					L.print(); break;
 				}
-		case 0: cout << "Bye-Bye!"; break;
+		case 0: cout << "Bye-Bye!\n"; break;
 		default: cout << "Error! Invalid input!" << endl;
 		}
 	} while (n != 0);
@@ -166,23 +170,30 @@ void Test(DoublyLinkedList<int> I, DoublyLinkedList<string> S)
 
 	cout << "Enter the value of element which you would delete: " << endl;
 	cin >> i_el;
-	if (I.delete_elem(i_el))
-		cout << "\nElements was deleted!" << endl << endl;
+	if (I.find_elem(i_el))
+	{
+		if (I.delete_elem(i_el))
+			cout << "\nElements was deleted!" << endl << endl;
+	}
 	else cout << "\nElement wasn't deleted!" << endl << endl;
 	I.print();
 
 	int i_min, i_max;
-	I.find_min(i_min);
-	I.find_max(i_max);
-	cout << "\nMinimum = " << i_min << endl;
-	cout << "\nMaximum = " << i_max << endl << endl;
+	if (I.try_find_min(i_min))
+		cout << "\nMinimum = " << i_min << endl;
+	else
+		cout << "\nThere isn't minimum in the list " << endl;
+	if (I.try_find_max(i_max))
+		cout << "\nMaximum = " << i_max << endl << endl;
+	else
+		cout << "\nThere isn't maximum in the list " << endl;
 	I.print();
 
 	cout << "Enter the value of elements which you would delete: " << endl;
 	cin >> i_el;
 	if (I.find_elem(i_el))
 	{
-		I.delete_all_elems(i_el);
+		if (I.delete_all_elems(i_el))
 		cout << "\nDone!" << endl << endl;
 		I.print();
 	}
@@ -225,17 +236,21 @@ void Test(DoublyLinkedList<int> I, DoublyLinkedList<string> S)
 	S.print();
 
 	string s_min, s_max;
-	S.find_min(s_min);
-	S.find_max(s_max);
-	cout << "\nMinimum = " << s_min << endl;
-	cout << "\nMaximum = " << s_max << endl << endl;
+	if (S.try_find_min(s_min))
+		cout << "\nMinimum = " << s_min << endl;
+	else
+		cout << "\nThere isn't minimum in the list " << endl;
+	if (S.try_find_max(s_max))
+		cout << "\nMaximum = " << s_max << endl << endl;
+	else
+		cout << "\nThere isn't maximum in the list " << endl;
 	S.print();
 
 	cout << "Enter the value of elements which you would delete: " << endl;
 	cin >> s_el;
 	if (S.find_elem(s_el))
 	{
-		S.delete_all_elems(s_el);
+		if (S.delete_all_elems(s_el))
 		cout << "\nDone!" << endl << endl;
 		S.print();
 	}
@@ -270,7 +285,7 @@ int main()
 
 		case 2: {
 					int n;
-					cout << "Choose data type: \n1 - integer, 2 - string" << endl;
+					cout << "Choose data type: \n1 - integer\n2 - string" << endl;
 					cin >> n;
 					if (n == 1) Program(I);
 					else if (n == 2) Program(S);

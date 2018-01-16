@@ -14,7 +14,7 @@ DoublyLinkedList<T>::DoublyLinkedList() //инициализци€ полей как пустых - констр
 template<typename T>								//деструктор - освобожение пам€ти
 DoublyLinkedList<T>::~DoublyLinkedList()
 {
-	Node *elem = head;
+	Node<T> *elem = head;
 
 	while (elem)
 	{
@@ -28,13 +28,13 @@ DoublyLinkedList<T>::~DoublyLinkedList()
 template <typename T>
 void DoublyLinkedList<T>::add_first(const T &t) // добавление элемента в начало списка
 {
-	Node *elem = new Node(t);	// —оздаем новый узел дл€ значени€
+	Node<T> *elem = new Node<T>(t);	// —оздаем новый узел дл€ значени€
 	if (head != nullptr)   // если список не пустой
 	{
 		elem->next = head;
 		head->prew = elem;
 	}
-	else 
+	else
 	{
 		tail = elem;
 	}
@@ -46,7 +46,7 @@ void DoublyLinkedList<T>::add_first(const T &t) // добавление элемента в начало 
 template <typename T>
 void DoublyLinkedList<T>::add_last(const T &t)		//добавление в конец
 {
-	Node *elem = new Node(t); // —оздаем новый узел дл€ значени€
+	Node<T> *elem = new Node<T>(t); // —оздаем новый узел дл€ значени€
 
 	if (tail != nullptr) {
 		elem->prew = tail;
@@ -63,7 +63,7 @@ void DoublyLinkedList<T>::add_last(const T &t)		//добавление в конец
 template <typename T>
 void DoublyLinkedList<T>::print()
 {
-	Node* elem = head; //¬ременный указатель на начало списка
+	Node<T>* elem = head; //¬ременный указатель на начало списка
 	while (elem != nullptr)
 	{
 		cout << elem->info << ' ';
@@ -78,32 +78,27 @@ bool DoublyLinkedList<T>::find_elem(const T &t)  //найти заданный элемент
 	//int pos = 0;
 	if (head != nullptr)
 	{
-		Node* elem  = head;
+		Node<T>* elem = head;
 		while ((elem != nullptr) && (elem->info != t)) // пока не конец списка и не нашли
 		{
 			elem = elem->next;
 			//pos++;
 		}
-		if (elem != nullptr)  // если элемент  нашелс€ 
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+		return (elem != nullptr);  // если элемент  нашелс€ 
+
 	}
-	/*else
+	else
 	{
-		cout << "List is empty!" << endl;
 		return false;
-	}*/
+	}
 }
 
 template <typename T>
-void DoublyLinkedList<T>::find_min(T &min) //найти минимум
+bool DoublyLinkedList<T>::try_find_min(T &min) //найти минимум bool
 {
-	Node* elem = head;
+	if (head == nullptr)
+		return false;
+	Node<T>* elem = head;
 	if (elem != nullptr)
 	{
 		min = elem->info;
@@ -115,17 +110,16 @@ void DoublyLinkedList<T>::find_min(T &min) //найти минимум
 			}
 			elem = elem->next;
 		}
+		return true;
 	}
-	/*else
-	{
-		cout << "List is empty!" << endl;
-	}*/
 }
 
 template <typename T>
-void DoublyLinkedList<T>::find_max(T &max) //найти минимум
+bool DoublyLinkedList<T>::try_find_max(T &max) //найти минимум
 {
-	Node* elem = head;
+	if (head == nullptr)
+		return false;
+	Node<T>* elem = head;
 	if (elem != nullptr)
 	{
 		max = elem->info;
@@ -137,94 +131,106 @@ void DoublyLinkedList<T>::find_max(T &max) //найти минимум
 			}
 			elem = elem->next;
 		}
+		return true;
 	}
-	/*else
-	{
-		cout << "List is empty!" << endl;
-	}*/
 }
 
 template <typename T>
 bool DoublyLinkedList<T>::delete_elem(const T &t)		//удалить заданный элемент 
 {
-	if (head == nullptr) {
-		/*cout << "List is empty!" << endl;*/
+	if (head == nullptr) 
+		return false;
+
+	Node<T>* elem = head;
+	if (elem = find(elem, t))
+	{
+		del(elem);
+		return true;
+	}
+	else				//если не нашелс€
+	{
 		return false;
 	}
-	else
-	{
-		Node* elem = head;
-		Node *prew_el, *next_el;
-		while ((elem != nullptr) && (elem->info != t)) // пока не конец списка и не нашли
-		{
-			elem = elem->next;
-		}
-		if (elem != nullptr) // если элемент нашелс€
-		{
-			if (elem->next != nullptr) //если не последний элемент
-			{
-					
-					if (elem != head) //если не первый
-					{
-						next_el = elem->next;
-						prew_el = elem->prew;
-						prew_el->next = next_el;
-						next_el->prew = prew_el;
 
-					}
-					else
-					{
-						head = elem->next;
-						head->prew = nullptr;
-						//elem->next = nullptr;
-					}
-					delete elem;
-			}
-			else
-			{
-				if (elem->prew != nullptr)
-				{
-					tail = elem->prew;
-				}
-				tail->next = nullptr;
-				delete elem;
-			}
-			--count;
-			return true;
-		}
-		else				//если не нашелс€
-		{
-			return false;
-		}
-	}
 }
+
 template <typename T>
-void DoublyLinkedList<T>::delete_all_elems(const T &t)	//удалить все элементы с заданным значением
+void DoublyLinkedList<T>::del(Node<T> *elem)	//удаление
 {
-	while (delete_elem(t));
+	Node<T> *prew_el, *next_el;
+	if (elem->next != nullptr) //если не последний элемент
+	{
+
+		if (elem != head) //если не первый
+		{
+			next_el = elem->next;
+			prew_el = elem->prew;
+			prew_el->next = next_el;
+			next_el->prew = prew_el;
+
+		}
+		else
+		{
+			head = elem->next;
+			head->prew = nullptr;
+		}
+		delete elem;
+	}
+	else //last
+	{
+		if (elem->prew != nullptr)
+		{
+			tail = elem->prew;
+			tail->next = nullptr;
+		}
+		else {
+			head = tail = nullptr;
+		}
+
+		delete elem;
+	}
+	--count;
+}
+
+template <typename T>
+bool DoublyLinkedList<T>::delete_all_elems(const T &t)	//удалить все элементы с заданным значением
+{
+	if (head == nullptr)
+		return false;
+	Node<T> *elem = head;
+	Node<T> *tmp = head;
+	bool deleted = false;
+	while (elem = find(elem, t) && (elem != nullptr))
+	{
+		tmp = elem;
+		elem = tmp->next;
+		del(tmp);
+		deleted = true;
+	}
+	return deleted;
 }
 
 template <typename T>
 bool DoublyLinkedList<T>::change_all_elems(const T &t, const T &new_info)	 //изменить все элементы с заданным значением на новое
 {
-	if (head == nullptr) {
-		/*cout << "List is empty!" << endl;*/
-		return false;
-	}
-	else
+	bool changed = false;
+	Node<T> *elem= head;
+	while (elem = find(elem,t))
 	{
-		bool ok = true; // элементы с заданным значением есть
-		Node* elem = head;
-		while (elem != nullptr) // пока не конец списка
-		{
-			while ((elem != nullptr) && (elem->info != t)) // пока не конец списка и не нашли
-			{
-				elem = elem->next;
-			}
-			if (elem != nullptr) // если элемент нашелс€
-			{
-				elem->info = new_info;
-			}
-		}
+		elem->info = new_info;
+		elem = elem->next;
+		changed = true;
 	}
+	return changed;
+}
+
+template<typename T>
+Node <T>* DoublyLinkedList<T>::find(Node<T>* elem, const T &e)
+{
+	while (elem != nullptr) // пока не конец списка
+		if (elem->info == e) // если элемент нашелс€
+			return elem;
+		else  //если нет
+			elem = elem->next;
+	return nullptr;
 }

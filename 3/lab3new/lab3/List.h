@@ -19,23 +19,26 @@ b)
 
 using namespace std;
 
+template <typename T>
+struct Node {
+	T info;
+	Node* next;
+	Node* prew;
+	Node(const T& el)
+	{
+		info = el;
+		prew = next = nullptr;
+	}
+};
 
 template <typename T>
 class DoublyLinkedList
 {
 private:
-		struct Node {
-			T info;
-			Node* next;
-			Node* prew;
-			Node(const T& el)
-			{
-				info = el;
-				prew = next = nullptr;
-			}
-		};
-		Node *head, *tail;
+		
+		Node<T> *head, *tail;
 		int count;
+		Node < T>* find(Node<T>* elem, const T &e);
 public:
 	DoublyLinkedList();        // конструктор - инициализация
 	~DoublyLinkedList();         // деструктор
@@ -47,10 +50,11 @@ public:
 	void print();			//печать всех элементов списка
 
 	bool find_elem(const T &t);			//найти заданный элемент
-	void find_min(T &min);		//найти минимальное значение
-	void find_max(T &max);	//найти максимальное значение
+	bool try_find_min(T &min);		//найти минимальное значение
+	bool try_find_max(T &max);	//найти максимальное значение
 	bool delete_elem(const T &t);		//удалить заданный элемент
-	void delete_all_elems(const T &t);	//удалить все элементы с заданным значением
+	bool delete_all_elems(const T &t);	//удалить все элементы с заданным значением
+	void del(Node<T> *elem);
 	bool change_all_elems(const T &t, const T &new_info);		 //изменить все элементы с заданным значением на новое
 };
 
