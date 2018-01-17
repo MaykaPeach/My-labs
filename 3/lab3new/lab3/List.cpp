@@ -75,29 +75,18 @@ void DoublyLinkedList<T>::print()
 template <typename T>
 bool DoublyLinkedList<T>::find_elem(const T &t)  //найти заданный элемент
 {
-	//int pos = 0;
-	if (head != nullptr)
-	{
 		Node<T>* elem = head;
 		while ((elem != nullptr) && (elem->info != t)) // пока не конец списка и не нашли
 		{
 			elem = elem->next;
-			//pos++;
 		}
 		return (elem != nullptr);  // если элемент  нашелся 
 
-	}
-	else
-	{
-		return false;
-	}
 }
 
 template <typename T>
 bool DoublyLinkedList<T>::try_find_min(T &min) //найти минимум bool
 {
-	if (head == nullptr)
-		return false;
 	Node<T>* elem = head;
 	if (elem != nullptr)
 	{
@@ -112,13 +101,12 @@ bool DoublyLinkedList<T>::try_find_min(T &min) //найти минимум bool
 		}
 		return true;
 	}
+	return false;
 }
 
 template <typename T>
 bool DoublyLinkedList<T>::try_find_max(T &max) //найти минимум
 {
-	if (head == nullptr)
-		return false;
 	Node<T>* elem = head;
 	if (elem != nullptr)
 	{
@@ -133,14 +121,13 @@ bool DoublyLinkedList<T>::try_find_max(T &max) //найти минимум
 		}
 		return true;
 	}
+	return false;
 }
 
 template <typename T>
 bool DoublyLinkedList<T>::delete_elem(const T &t)		//удалить заданный элемент 
 {
-	if (head == nullptr) 
-		return false;
-
+	
 	Node<T>* elem = head;
 	if (elem = find(elem, t))
 	{
@@ -195,8 +182,6 @@ void DoublyLinkedList<T>::del(Node<T> *elem)	//удаление
 template <typename T>
 bool DoublyLinkedList<T>::delete_all_elems(const T &t)	//удалить все элементы с заданным значением
 {
-	if (head == nullptr)
-		return false;
 	Node<T> *elem = head;
 	Node<T> *tmp = head;
 	bool deleted = false;
